@@ -1,0 +1,59 @@
+{% extends 'users/base.html' %}
+{% block body %}
+
+<h1 align='center' class="text-3xl font-semibold mt-16">Welcome, {{ username }}</h1>
+
+{% if is_trainer %}
+<div>
+    <div class="text-2xl font-semibold ml-16 mt-16">Clients: </div>
+
+    <div class="m-16 mt-5 pt-2 pb-2">
+        <div class="clientList-header flex flex-wrap space-x-40 pb-2">
+            <span>Name</span>
+            <span>Username</span>
+        </div>
+        <hr>
+        {% for profile in all_profiles %}
+            {% if profile.client.trainer.profile.user.username == username %} 
+            <div class="clientList-row text-lg p-10 m-10 bg-gray-200 rounded-lg shadow-lg">
+                <span class="font-semibold pr-28">{{ profile.user.first_name }} {{ profile.user.last_name }}</span>
+                <span class="font-semibold pr-10">{{ profile.user.username }}</span>
+            </div>
+            {% endif %}
+        {% endfor %}    
+    </div>
+
+</div>
+
+<div>
+    <div class="text-2xl font-semibold ml-16 mt-16">Messages: </div>
+
+    {% if client_chatrooms %}
+        {% for room_data in client_chatrooms %}
+            <div class="flex shadow-lg p-10 m-10 bg-gray-200 rounded-lg text-lg">
+                <a class="font-semibold ml-5" href="{% url 'chatroom' room_data.chatroom.slug %}">{{ room_data.chatroom.name }}</a> <br>
+                {% if room_data.last_message %}
+                    <span class="ml-96">Last message at: {{ room_data.last_message|date:"m/d/y g:i a" }}</span><br>
+                {% else %}
+                    <span class="ml-96">No messages yet</span>
+                {% endif %}
+                {% if room_data.unread_count > 0 %}
+                    <span class="ml-80">{{ room_data.unread_count }} new messages</span><br>
+                {% else %}
+                    <span class="ml-80">No new messages</span><br>
+                {% endif %}
+                
+            </div>
+        {% endfor %}
+    {% endif %}
+
+</div>
+{% endif %}
+
+
+
+{% if not is_trainer %}
+{% endif %}
+
+
+{% endblock %}

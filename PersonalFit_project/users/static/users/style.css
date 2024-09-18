@@ -1,0 +1,11 @@
+
+div.clientList-header, div.clientList-row{
+    display: table;
+    width: 93%;
+    table-layout: fixed;
+}
+
+div.clientList-header span, div.clientList-row span{
+    display: table-cell;
+    text-align: center;
+}
