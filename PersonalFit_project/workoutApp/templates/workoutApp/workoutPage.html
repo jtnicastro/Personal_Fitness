@@ -1,0 +1,94 @@
+{% extends 'users/base.html' %}
+{% load static %}
+{% block body %}
+<h1 align='center' class="text-4xl font-semibold mt-16">{{ client.profile.user.username }}</h1>
+
+<div class="flex justify-between">
+    <h1 class="font-semibold m-16 mb-5 text-3xl">Exercises</h1>
+    {% if request.user.profile.is_trainer %}
+    <a href="{% url 'addWorkout' client.profile.user.username %}">
+        <img class='h-9 w-9 mt-16 mr-48' src="{% static 'workoutApp/images/add_icon.png' %}" alt="">
+    </a>
+    {% endif %}
+</div>
+
+{% for workout in workouts %}
+    {% if request.user.profile.is_trainer %}
+    <div class="flex justify-center">
+        <a class="ml-auto mr-5 mt-11" href="{% url 'editWorkout' client.profile.user.username workout.id %}">
+            <button class="px-5 h-9 bg-green-200 border border-gray-900 hover:bg-green-400 rounded" type="button">Edit</button>
+        </a>   
+        <a href="{% url 'deleteWorkout' client.profile.user.username workout.id %}" onclick="return confirm('Are you sure you want to delete this workout?');">
+            <img class='h-9 w-9 mt-11 mr-72' src="{% static 'workoutApp/images/trash_icon.png' %}" alt="">
+        </a>
+    </div>
+    {% endif %}
+
+    <div class="justify-center shadow-lg p-3 m-3 mx-64 mb-16 rounded-lg bg-blue-200">
+        <h1 class="text-2xl font-semibold text-center m-5">{{ workout.workout_names }}</h1>
+        <div class="m-5">
+            <table class="table-auto w-4/5 mx-auto text-center">
+                <thead>
+                    <tr class="border-b-2 border-gray-700 text-lg text-gray-700 font-semibold">
+                        <th class="w-2/5 px-4 py-2 text-left">Exercise</th>
+                        <th class="w-1/5 px-3 py-2">Weight lbs.</th>
+                        <th class="w-1/5 px-4 py-2">Sets</th>
+                        <th class="w-1/5 px-4 py-2">Reps</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for exercise in workout.exercises.all %}
+                    <tr class="border-b border-gray-500 text-lg">
+                        <td class="px-4 py-2 text-left">{{ exercise.name }}</td>
+                        <td class="px-4 py-2">{{ exercise.weight }}</td>
+                        <td class="px-4 py-2">{{ exercise.sets }}</td>
+                        <td class="px-4 py-2">{{ exercise.reps }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endfor %}
+
+
+<div class="flex justify-between mt-40">
+    <h1 class="font-semibold m-16 text-3xl">Weekly Schedule</h1>
+    {% if request.user.profile.is_trainer %}
+    <a class="mt-14" href="{% url 'editSchedule' client.profile.user.username %}">
+        <button class="mr-16 text-lg px-11 py-4 bg-green-200 border border-gray-900 hover:bg-green-400 rounded" type="button">Edit</button>
+    </a>
+    {% endif %}
+</div>
+<div class="justify-center shadow-lg p-10 m-3 mx-24 mb-32 rounded-lg bg-blue-100">
+    <table class="table-fixed w-full text-center">
+        <thead>
+            <tr class="border-2  border-gray-700 text-lg">
+                <th class="border-r-2 border-gray-700 px-4 py-2">Sunday</th>
+                <th class="border-r-2 border-gray-700 px-4 py-2">Monday</th>
+                <th class="border-r-2 border-gray-700 px-4 py-2">Tuesday</th>
+                <th class="border-r-2 border-gray-700 px-4 py-2">Wednesday</th>
+                <th class="border-r-2 border-gray-700 px-4 py-2">Thursday</th>
+                <th class="border-r-2 border-gray-700 px-4 py-2">Friday</th>
+                <th class="px-4 py-2">Saturday</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for day in schedule %}
+            <tr class="font-semibold text-2xl">
+                <td class="border-2 border-gray-700 px-4 py-24">{{ day.sunday|default:"Rest" }}</td>
+                <td class="border-2 border-gray-700 px-4 py-24">{{ day.monday|default:"Rest" }}</td>
+                <td class="border-2 border-gray-700 px-4 py-24">{{ day.tuesday|default:"Rest" }}</td>
+                <td class="border-2 border-gray-700 px-4 py-24">{{ day.wednesday|default:"Rest" }}</td>
+                <td class="border-2 border-gray-700 px-4 py-24">{{ day.thursday|default:"Rest" }}</td>
+                <td class="border-2 border-gray-700 px-4 py-24">{{ day.friday|default:"Rest" }}</td>
+                <td class="border-2 border-gray-700 px-4 py-24">{{ day.saturday|default:"Rest" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}
+

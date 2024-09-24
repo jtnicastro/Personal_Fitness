@@ -1,0 +1,17 @@
+{% extends 'users/base.html' %}
+{% block body %}
+<h1 class="font-semibold m-10 text-2xl">Clients</h1>
+
+
+{% for client in clients %}
+    <div class="flex shadow-lg p-10 m-10 bg-gray-200 rounded-lg text-lg">
+        <a class="font-semibold ml-5" href="{% url 'workoutPage' client.profile.user.username %}">
+            {{ client.profile.user.username }}
+        </a>
+    </div>
+{% endfor %}
+{% endblock %}
+
+
+
+

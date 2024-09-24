@@ -1,11 +1,12 @@
 
 div.exercise-header, div.exercise-row{
-    display: table-row;
+    display: table;
     width: 93%;
     table-layout: fixed;
 }
 
 div.exercise-header span, div.exercise-row span{
     display: table-cell;
-    text-align: center;
+    text-align: left;
 }
+

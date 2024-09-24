@@ -1,0 +1,78 @@
+{% extends 'users/base.html' %}
+{% block body %}
+<h1 class="font-semibold m-10 text-2xl">Add workout for {{ client.profile.user.username }}</h1>
+
+<form method="POST">
+    {% csrf_token %}
+    <div class="justify-center shadow-lg p-3 m-3 mx-32 mb-16 rounded-lg bg-blue-200">
+        <div class="flex justify-center h-7 my-5">
+            <label class="text-xl font-semibold mr-5" for="workoutName_id">Workout Name:</label>
+            {{ workout_form.workout_names  }}
+        </div>
+        <div id="exercise-formset">
+            <table class="table-auto w-4/5 mx-auto text-center">
+                <thead>
+                    <tr class="border-b-2 border-gray-700 text-lg text-gray-700">
+                        <th class="w-2/5 px-4 py-2 text-left">Exercise</th>
+                        <th class="w-1/5 px-3 py-2">Weight lbs.</th>
+                        <th class="w-1/5 px-4 py-2">Sets</th>
+                        <th class="w-1/5 px-4 py-2">Reps</th>
+                    </tr>
+                </thead>
+        
+                <tbody>
+                    {{ exercise_formset.management_form }}
+                    {% for form in exercise_formset %}
+                    <tr class="exercise-form border-b border-gray-500 text-lg">
+                        <td class="py-3 pr-3 text-left">{{ form.name }}</td>
+                        <td class="pr-5">{{ form.weight }}</td>
+                        <td class="pr-5">{{ form.sets }}</td>
+                        <td>{{ form.reps }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="flex justify-between m-10">
+            <button class="ml-32 px-5 py-2 bg-gray-200 border border-blue-900 hover:bg-gray-400 rounded" type="button" id="add-exercise">Add Exercise</button>
+            <button class="mr-32 px-5 py-2 bg-blue-400 border border-blue-900 hover:bg-blue-600 rounded" type="submit">Save Workout</button>
+        </div>
+    </div>
+</form>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const addButton = document.getElementById('add-exercise');
+    const formsetDiv = document.getElementById('exercise-formset').querySelector('tbody');
+    const totalFormsInput = document.getElementById('id_exercises-TOTAL_FORMS');
+
+    if (!totalFormsInput) {
+        console.error("TOTAL_FORMS input field not found. Ensure the management form is properly rendered.");
+        return;
+    }
+    
+
+    if (addButton && formsetDiv && totalFormsInput) {
+        addButton.addEventListener('click', function() {
+            const currentFormCount = parseInt(totalFormsInput.value);
+
+            const newForm = formsetDiv.querySelector('.exercise-form').cloneNode(true);
+
+            newForm.innerHTML  = newForm.innerHTML.replace(/exercises-\d+/g, 'exercises-' + currentFormCount);
+        
+
+            newForm.querySelectorAll('input').forEach(input => input.value = '');
+
+            formsetDiv.appendChild(newForm);
+
+            totalFormsInput.value = currentFormCount + 1;
+            console.log('Updated total forms:', totalFormsInput.value);
+        });
+    } else {
+        console.log('Form elements not found')
+    }
+});
+</script>
+
+{% endblock %}
+

@@ -1,0 +1,42 @@
+{% extends 'users/base.html' %}
+{% load static %}
+{% block body %}
+<h1 align='center' class="text-4xl font-semibold mt-16 mb-16">Edit Schedule</h1>
+
+<form method="POST">
+    {% csrf_token %}
+    <div class="justify-center shadow-lg p-10 m-3 mx-24 mb-10 rounded-lg bg-blue-100">
+        <table class="table-fixed w-full text-center">
+            <thead>
+                <tr class="border-2  border-gray-700 text-lg">
+                    <th class="border-r-2 border-gray-700 px-4 py-2">Sunday</th>
+                    <th class="border-r-2 border-gray-700 px-4 py-2">Monday</th>
+                    <th class="border-r-2 border-gray-700 px-4 py-2">Tuesday</th>
+                    <th class="border-r-2 border-gray-700 px-4 py-2">Wednesday</th>
+                    <th class="border-r-2 border-gray-700 px-4 py-2">Thursday</th>
+                    <th class="border-r-2 border-gray-700 px-4 py-2">Friday</th>
+                    <th class="px-4 py-2">Saturday</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="border-2 border-gray-700 px-4 py-16">{{ form.sunday }}</td>
+                    <td class="border-2 border-gray-700 px-4 py-16">{{ form.monday }}</td>
+                    <td class="border-2 border-gray-700 px-4 py-16">{{ form.tuesday }}</td>
+                    <td class="border-2 border-gray-700 px-4 py-16">{{ form.wednesday }}</td>
+                    <td class="border-2 border-gray-700 px-4 py-16">{{ form.thursday }}</td>
+                    <td class="border-2 border-gray-700 px-4 py-16">{{ form.friday }}</td>
+                    <td class="border-2 border-gray-700 px-4 py-16">{{ form.saturday }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="flex justify-center m-10">
+        <button class="text-lg px-8 py-4 bg-blue-400 border border-blue-900 hover:bg-blue-600 rounded" type="submit">Save </button>
+    </div>
+</form>
+
+
+
+{% endblock %}
+
