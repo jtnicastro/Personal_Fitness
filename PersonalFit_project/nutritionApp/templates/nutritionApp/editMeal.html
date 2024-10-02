@@ -1,0 +1,99 @@
+{% extends 'users/base.html' %}
+{% block body %}
+<h1 class="font-semibold m-10 text-2xl">Edit workout for {{ client.profile.user.username }}</h1>
+
+<form method="POST">
+    {% csrf_token %}
+    {{ food_formset.management_form }}
+    <div class="justify-center shadow-lg p-3 m-3 mx-32 mb-16 rounded-lg bg-blue-200">
+        <div class="flex justify-center h-7  my-5">
+            <label class="text-xl font-semibold mt-1 mr-5" for="mealName_id">Meal Name:</label>
+            <div class="meal-name-input">
+                {{ meal_form.meal_names }}
+            </div>
+        </div>
+        <div class="m-5 mt-12" id="food-formset">
+            <table style=width:95% class="table-auto text-center ml-7">
+                <thead>
+                    <tr class="border-b-2 border-gray-700 text-lg text-gray-700 font-semibold">
+                        <th class="text-center py-2 text-left border-2 border-gray-700">Food</th>
+                        <th class="py-2 border-2 border-gray-700">Calories</th>
+                        <th class="py-2 border-2 border-gray-700">Protein (g)</th>
+                        <th class="py-2 border-2 border-gray-700">Fat (g)</th>
+                        <th class="py-2 border-2 border-gray-700">Carbohydrates (g)</th>
+                        <th class="py-2 border-2 border-gray-700">Serving Size</th>
+                    </tr>
+                </thead>
+                <tbody class="border-b-2 border-gray-700">
+                    {% for form in food_formset %}
+                    <tr class="text-lg food-form">
+                        <td class="py-4 border border-gray-700 border-l-2">{{ form.id }}{{ form.name }}</td>
+                        <td class="py-2 border border-gray-700">{{ form.calories }}</td>
+                        <td class="py-2 border border-gray-700">{{ form.protein }}</td>
+                        <td class="py-2 border border-gray-700">{{ form.fats }}</td>
+                        <td class="py-2 border border-gray-700">{{ form.carbs }}</td>
+                        <td class="py-2 border border-gray-700 border-r-2">{{ form.servingSize }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="flex justify-between m-10">
+            <button class="ml-32 px-5 py-2 bg-gray-200 border border-blue-900 hover:bg-gray-400 rounded" type="button" id="add-meal">Add Food</button>
+            <button class="mr-32 px-5 py-2 bg-blue-400 border border-blue-900 hover:bg-blue-600 rounded" type="submit">Save Changes</button>
+        </div>
+    </div>
+</form>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const addButton = document.getElementById('add-meal');
+        const formsetDiv = document.getElementById('food-formset').querySelector('tbody');
+        const totalFormsInput = document.getElementById('id_food-TOTAL_FORMS');
+    
+        if (!totalFormsInput) {
+            console.error("TOTAL_FORMS input field not found. Ensure the management form is properly rendered.");
+            return;
+        }
+    
+        if (addButton && formsetDiv && totalFormsInput) {
+            addButton.addEventListener('click', function() {
+                const currentFormCount = parseInt(totalFormsInput.value);
+    
+                const newForm = formsetDiv.querySelector('.food-form').cloneNode(true);
+    
+                newForm.innerHTML  = newForm.innerHTML.replace(/food-\d+/g, 'food-' + currentFormCount);
+    
+                newForm.querySelectorAll('input').forEach(input => input.value = '');
+    
+                formsetDiv.appendChild(newForm);
+    
+                totalFormsInput.value = currentFormCount + 1;
+                console.log('Updated total forms:', totalFormsInput.value);
+            });
+        } else {
+            console.log('Form elements not found');
+        }
+    });
+</script>
+
+<style>
+    input {
+        width: 80px;
+        padding: 5px;
+    }
+
+    td:nth-child(1) input {
+        width: 150px; /* Larger width for 'Food' input */
+    }
+    td:nth-child(6) input {
+        width: 150px; /* Larger width for 'Food' input */
+    }
+
+    .meal-name-input input {
+        width: 150px;
+        font-size: 1.2rem;
+    }
+</style>
+
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends 'users/base.html' %}
+{% block body %}
+<h1 class="font-semibold m-10 text-2xl">Client Updates</h1>
+
+<div class="m-8 mt-5 pt-2 pb-2">
+    <div class="flex justify-between pb-2">
+        <span class="pl-16">Username</span>
+        <span class="pl-16">Last Update</span>
+        <span class="">Height In.</span>
+        <span class="">Weight Lbs.</span>
+        <span class="pr-24">Uploads</span>
+    </div>
+    <hr>
+</div>
+
+{% for client in clients %}
+    <div class="flex shadow-lg p-10 m-10 bg-gray-200 rounded-lg text-lg">
+        <a class="font-semibold ml-5" href="">
+            {{ client.profile.user.username }}
+        </a>
+    </div>
+{% endfor %}
+
+{% endblock %}

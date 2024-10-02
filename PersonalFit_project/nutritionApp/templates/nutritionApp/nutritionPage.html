@@ -1,0 +1,155 @@
+{% extends 'users/base.html' %}
+{% load static %}
+{% block body %}
+<h1 align='center' class="text-4xl font-semibold mt-16">{{ client.profile.user.username }}</h1>
+
+<div class="flex justify-between">
+    <h1 class="font-semibold m-16 mb-1 text-3xl">Meal Plan</h1>
+    {% if request.user.profile.is_trainer %}
+    <a href="{% url 'addMeal' client.profile.user.username %}">
+        <img class='h-9 w-9 mt-16 mr-24' src="{% static 'workoutApp/images/add_icon.png' %}" alt="">
+    </a>
+    {% endif %}
+</div>
+
+    {% for meal_with_totals in meals %}
+    {% if request.user.profile.is_trainer %}
+    <div class="flex justify-center mt-11">
+        <a class="ml-auto mr-5 mt-1" href="{% url 'editMeal' client.profile.user.username meal_with_totals.meal.id %}">
+            <button class="px-5 h-9 bg-green-200 border border-gray-900 hover:bg-green-400 rounded" type="button">Edit</button>
+        </a>   
+        <a href="{% url 'deleteMeal' client.profile.user.username meal_with_totals.meal.id %}" onclick="return confirm('Are you sure you want to delete this meal?');">
+            <img class='h-9 w-9 mt-1 mr-40' src="{% static 'workoutApp/images/trash_icon.png' %}" alt="">
+        </a>
+    </div>
+    {% endif %}
+
+    <!-- Table for each meal macros -->
+    <div class="justify-center shadow-lg p-3 m-3 mx-32 mb-16 rounded-lg bg-blue-200">
+        <h1 class="text-2xl font-semibold text-center m-5">{{ meal_with_totals.meal.meal_names }}</h1>
+        <div class="m-5">
+            <table style=width:95% class="table-auto text-center ml-7">
+                <thead>
+                    <tr class="border-b-2 border-gray-700 text-lg text-gray-700 font-semibold">
+                        <th class="px-24 py-2 text-left border-2 border-gray-700">Food</th>
+                        <th class="px-10 py-2 border-2 border-gray-700">Calories</th>
+                        <th class="px-7 py-2 border-2 border-gray-700">Protein (g)</th>
+                        <th class="px-7 py-2 border-2 border-gray-700">Fat (g)</th>
+                        <th class="px-4 py-2 border-2 border-gray-700">Carbohydrates (g)</th>
+                        <th class="px-16 py-2 border-2 border-gray-700">Serving Size</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for food in meal_with_totals.meal.food.all %}
+                    <tr class="text-lg">
+                        <td class="px-4 py-2 text-left border border-gray-700 border-l-2">{{ food.name }}</td>
+                        <td class="px-4 py-2 border border-gray-700">{{ food.calories }}</td>
+                        <td class="px-4 py-2 border border-gray-700">{{ food.protein }}</td>
+                        <td class="px-4 py-2 border border-gray-700">{{ food.fats }}</td>
+                        <td class="px-4 py-2 border border-gray-700">{{ food.carbs }}</td>
+                        <td class="px-4 py-2 border border-gray-700 border-r-2">{{ food.servingSize }}</td>
+                    </tr>
+                    {% endfor %}
+
+                    <tr class="border-t-2 border-gray-700 text-lg">
+                        <th class="px-4 py-2 text-xl text-left border-2 border-gray-700 text-center">Total</th>
+                        <th class="px-4 py-2 border-2 border-gray-700">{{ meal_with_totals.total_calories }}</th>
+                        <th class="px-4 py-2 border-2 border-gray-700">{{ meal_with_totals.total_protein }}</th>
+                        <th class="px-4 py-2 border-2 border-gray-700">{{ meal_with_totals.total_fats }}</th>
+                        <th class="px-4 py-2 border-2 border-gray-700">{{ meal_with_totals.total_carbs }}</th>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endfor %}
+
+
+<!-- Table for total daily macros -->
+<h1 class="font-semibold ml-16 mb-2 mt-40  text-3xl">Overview</h1>
+<div class="grid grid-cols-2 gap-4">
+    <div class="mt-48">
+        <div class="shadow-lg p-3 w-4/5 ml-12 mb-32 rounded-lg bg-blue-200">
+            <h1 class="text-2xl font-semibold text-center m-5">Total Daily Calories</h1>
+            <div class="m-5 ml-1">
+                <table style=width:95% class="table ml-4 text-center">
+                    <thead>
+                        <tr class="border-b-2 border-gray-700 text-lg text-gray-700">
+                            <th class="px-9 py-2 text-left border-2 border-gray-700">Meal</th>
+                            <th class="px-2 py-2 border-2 border-gray-700">Calories</th>
+                            <th class="px-2 py-2 border-2 border-gray-700">Protein (g)</th>
+                            <th class="px-1 py-2 border-2 border-gray-700">Fat (g)</th>
+                            <th class="px-1 py-2 border-2 border-gray-700">Carbohydrates (g)</th>
+                        </tr>
+                    </thead>
+        
+                    <tbody>
+                        {% for meal_with_totals in meals %}
+                        <tr class="border-b border-gray-500 text-lg">
+                            <td class="px-4 py-2 text-left border-r border-gray-700 border-l-2">{{ meal_with_totals.meal.meal_names }}</td>
+                            <td class="px-1 py-2 border-r border-gray-700">{{ meal_with_totals.total_calories }}</td>
+                            <td class="px-1 py-2 border-r border-gray-700">{{ meal_with_totals.total_protein }}</td>
+                            <td class="px-1 py-2 border-r border-gray-700">{{ meal_with_totals.total_fats }}</td>
+                            <td class="px-1 py-2 border-r-2 border-gray-700">{{ meal_with_totals.total_carbs }}</td>
+                        </tr>
+                        {% endfor %}
+                        <tr class="text-lg">
+                            <th class="px-4 py-2 text-xl text-center border-2 border-gray-700">Total</th>
+                            <th class="px-1 py-2 border-2 border-gray-700">{{ total_daily_calories }}</th>
+                            <th class="px-1 py-2 border-2 border-gray-700">{{ total_daily_protein }}</th>
+                            <th class="px-2 py-2 border-2 border-gray-700">{{ total_daily_fats }}</th>
+                            <th class="px-1 py-2 border-2 border-gray-700">{{ total_daily_carbs }}</th>
+                        </tr>
+        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div  class="ml-auto mb-24 my-5 mr-40">
+        <h1 class="text-lg font-semibold text-center m-5">Daily Calories Macronutrient Breakdown</h1>
+        <canvas style="height: 350px" class="" id="myChart"></canvas>
+    </div>
+</div>
+
+<script>
+    const ctx = document.getElementById('myChart');
+  
+    new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: [
+                'Protein: '+{{ proteinP|floatformat:1 }}+'%', 
+                'Fat: '+{{ fatP|floatformat:1 }}+'%', 
+                'Carbs: '+{{ carbP|floatformat:1 }}+'%'
+            ],
+            datasets: [{
+                data: [
+                    {{ proteinP|floatformat:1 }},
+                    {{ fatP|floatformat:1 }}, 
+                    {{ carbP|floatformat:1 }},
+                ],
+                backgroundColor: [
+                    'rgba(232, 6, 6)',
+                    'rgba(0, 151, 19)',
+                    'rgba(10, 102, 219)',
+                ],
+                borderColor: [
+                    'rgba(232, 6, 6)',
+                    'rgba(0, 151, 19)',
+                    'rgba(10, 102, 219)',
+                ],
+                
+                borderWidth: 1,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            }]
+        },
+    });
+</script>
+
+{% endblock %}

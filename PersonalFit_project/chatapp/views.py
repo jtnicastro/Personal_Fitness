@@ -25,8 +25,10 @@ def index(request):
                     'unread_count': unread_count,
                     'last_message': last_message.date if last_message else None
                 })
+        client_chatrooms = sorted(client_chatrooms, key=lambda x: x['last_message'] or '', reverse=True)
     else:
         clients = None
+        client_chatrooms = []
 
     return render(request, 'chatapp/index.html', {'client_chatrooms':client_chatrooms})
 

@@ -31,6 +31,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'updateApp',
+    'nutritionApp',
     'workoutApp',
     'chatapp',
     'channels',
@@ -134,5 +136,6 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
+LOGIN_REDIRECT_URL = 'users/index.html'
 
 EMAIL_BACKEND ='django.core.mail.backends.console.EmailBackend'

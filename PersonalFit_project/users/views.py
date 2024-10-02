@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect 
 from django.contrib.auth import authenticate, login, logout
 from .forms import LoginForm, UserRegistrationForm
 from django.contrib.auth.decorators import login_required
@@ -17,7 +17,7 @@ def user_login(request):
                 request, username=data['username'], password=data['password'])
             if user is not None:
                 login(request, user)
-                return HttpResponse("user authenticated and logged in")
+                return redirect('users:index')
             else:
                 return HttpResponse("Invalid credentials")
 
@@ -28,6 +28,7 @@ def user_login(request):
 def user_logout(request):
     if request.method == "POST":
         logout(request)
+        return redirect('users:login')
 
     return render(request, 'users/logout.html')
 
