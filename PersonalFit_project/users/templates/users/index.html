@@ -30,20 +30,27 @@
 
     {% if client_chatrooms %}
         {% for room_data in client_chatrooms %}
+            <a class="font-semibold ml-5" href="{% url 'chatroom' room_data.chatroom.slug %}">
             <div class="flex shadow-lg p-10 m-10 bg-gray-200 rounded-lg text-lg">
-                <a class="font-semibold ml-5" href="{% url 'chatroom' room_data.chatroom.slug %}">{{ room_data.chatroom.name }}</a> <br>
-                {% if room_data.last_message %}
-                    <span class="ml-96">Last message at: {{ room_data.last_message|date:"m/d/y g:i a" }}</span><br>
-                {% else %}
-                    <span class="ml-96">No messages yet</span>
-                {% endif %}
-                {% if room_data.unread_count > 0 %}
-                    <span class="ml-80">{{ room_data.unread_count }} new messages</span><br>
-                {% else %}
-                    <span class="ml-80">No new messages</span><br>
-                {% endif %}
-                
+                <div class="w-1/3 text-left">
+                    <span class="">{{ room_data.chatroom.name }}</span>
+                </div>
+                <div class="w-1/3 text-center">
+                    {% if room_data.last_message %}
+                        <span class="">Last message at: {{ room_data.last_message|date:"m/d/y g:i a" }}</span><br>
+                    {% else %}
+                        <span class="">No messages yet</span>
+                    {% endif %}
+                </div>
+                <div class="w-1/3 text-right">
+                    {% if room_data.unread_count > 0 %}
+                        <span class="">{{ room_data.unread_count }} new messages</span><br>
+                    {% else %}
+                        <span class="">No new messages</span><br>
+                    {% endif %}
+                </div>
             </div>
+            </a>
         {% endfor %}
     {% endif %}
 

@@ -1,24 +1,82 @@
 {% extends 'users/base.html' %}
 {% block body %}
-<h1 class="font-semibold m-10 text-2xl">Client Updates</h1>
+<h1 class="font-semibold m-10 text-2xl">Most Recent Client Updates</h1>
 
-<div class="m-8 mt-5 pt-2 pb-2">
-    <div class="flex justify-between pb-2">
-        <span class="pl-16">Username</span>
-        <span class="pl-16">Last Update</span>
-        <span class="">Height In.</span>
-        <span class="">Weight Lbs.</span>
-        <span class="pr-24">Uploads</span>
+<form class="text-center" action="" method="GET">
+    <input class="py-2 mr-3 border border-gray-700" type="search" name="client_name">
+    <button class="px-5 py-2 bg-blue-200 border border-blue-900 hover:bg-blue-400 rounded" type="submit">Search</button>
+</form>
+
+
+<div class="m-8 mt-7 pt-2 pb-2">
+    <div class="flex pb-2 text-center">
+        <div class="w-1/5">
+            <span class="">Username</span>
+        </div>
+        <div class="w-1/4">
+            <span class="">Last Update</span>
+        </div>
+        <div class="w-1/12 mx-9">
+            <span class="">Height In.</span>
+        </div>
+        <div class="w-1/12 mx-7">
+            <span class="">Weight Lbs.</span>
+        </div>
+        <div style='word-wrap: break-word;' class="w-1/4 ml-5">
+            <span class="">Uploads</span>
+        </div>
     </div>
     <hr>
 </div>
 
-{% for client in clients %}
-    <div class="flex shadow-lg p-10 m-10 bg-gray-200 rounded-lg text-lg">
-        <a class="font-semibold ml-5" href="">
-            {{ client.profile.user.username }}
-        </a>
+{% for update in updates %}
+    <a href="{% url 'updatePage' update.client.profile.user.username %}">
+    <div class="flex shadow-lg py-10 m-10 bg-gray-200 rounded-lg text-lg text-center font-semibold">
+        <div class="w-1/5 pr-16 text-xl">
+            <span>{{ update.client.profile.user.username }}</span>
+        </div>
+        <div class="w-1/4">
+            <span class="">{{ update.date }}</span>
+        </div>
+        <div class="w-1/12 mx-9">
+            <span>{{ update.height }}</span>
+        </div>
+        <div class="w-1/12 mx-7">
+            <span class="">{{ update.weight }}</span>
+        </div>
+        <div style='word-wrap: break-word;' class="w-1/4 ml-5 text-base text-blue-700 text-left">
+            <span class="">{{ update.file }}</span>
+        </div>
     </div>
+    </a>
 {% endfor %}
+
+
+<div class="text-center text-lg mt-16">
+    Page: {{ updates.number }} of {{ updates.paginator.num_pages }}
+</div>
+
+<div class="text-base flex justify-center mt-5 mb-12">
+    <div class="">
+    {% if updates.has_previous %}
+        <a class="border border-gray-700 bg-blue-100 m-3 py-2 px-3 rounded-lg" href="?page=1">First</a>
+        <a class="border border-gray-700 bg-blue-100 m-3 py-2 px-3 rounded-lg" href="?page={{ updates.previous_page_number }}">Previous</a>
+    {% endif %}
+    </div>    
+    <div>
+    {% if updates.has_next %}
+        <a class="border border-gray-700 bg-blue-100 m-3 py-2 px-3 rounded-lg" href="?page={{ updates.next_page_number }}">Next</a>
+        <a class="border border-gray-700 bg-blue-100 m-3 py-2 px-3 rounded-lg" href="?page={{ updates.paginator.num_pages }}">Last</a>
+    {% endif %}
+    </div>
+    
+</div>
+
+<style>
+    input {
+        width: 300px;
+        padding: 10px;
+    }
+</style>
 
 {% endblock %}

@@ -1,0 +1,102 @@
+{% extends 'users/base.html' %}
+{% load static %}
+{% block body %}
+<h1 align='center' class="text-4xl font-semibold mt-16">{{ client.profile.user.username }}</h1>
+
+<div class="">
+    <h1 class="font-semibold m-16 mb-5 text-3xl">Add update</h1>
+</div>
+
+<div class="justify-center shadow-lg py-16 px-32 m-3 mx-64 mb-16 rounded-lg bg-blue-200">
+    <div class="">
+        <h1 class="text-center font-semibold text-2xl mb-10">{{ date }}</h1>
+    </div>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="flex justify-between text-xl font-semibold">
+            <label class="mt-3">Height (Inches):</label>
+            <div class="border-2 border-gray-900 rounded mr-2">{{ update_form.height }}</div>
+        </div>
+        <div class="flex justify-between text-xl font-semibold mt-12">
+            <label class="mt-3">Weight (Pounds):</label>
+            <div class="border-2 border-gray-900 rounded mr-2">{{ update_form.weight }}</div>
+        </div>
+        <div class="flex justify-between text-xl font-semibold mt-12">
+            <label class="mt-4 mr-24">Uploads:</label>
+            <div class="text-lg mt-4 ml-32">{{ update_form.file }}</div>
+        </div>
+        <div class="flex justify-between text-xl font-semibold mt-12">
+            <label class="mt-2">Notes:</label>
+            <div class="border-2 border-gray-900 rounded mr-2 mt-3 text-lg">{{ update_form.notes }}</div>
+        </div>
+        <div class="text-xl font-semibold mt-12">
+            <button class="mr-32 px-5 py-2 bg-blue-400 border border-blue-900 hover:bg-blue-600 rounded" type="submit">Add</button>
+        </div>
+
+    </form>
+    
+</div>
+
+<div class="m-8 mt-5 pt-2 pb-2">
+    <h1 class="font-semibold m-16 mb-10 text-3xl">Previous updates</h1>
+    <div class="flex justify-between py-2 text-center">
+        <div class="w-1/6">
+            <span class="">Date</span>
+        </div>
+        <div class="w-1/12">
+            <span class="ml-6">Height In.</span>
+        </div>
+        <div class="w-1/12">
+            <span class="ml-3">Weight Lbs.</span>
+        </div>
+        <div class="w-1/4">
+            <span class="">Uploads</span>
+        </div>
+        <div class="w-1/4">
+            <span class="pr-24">Notes</span>
+        </div>
+    </div>
+    <hr>
+</div>
+    
+{% for update in updates %}
+    <div class="flex justify-between shadow-lg p-10 m-10 bg-blue-200 rounded-lg text-lg text-center font-semibold">
+        
+        <div class="w-1/6">
+            <span class="">{{ update.date }}</span>
+        </div>
+        <div class="w-1/12">
+            <span class="">{{ update.height }}</span>
+        </div>
+        <div class="w-1/12">
+            <span class="">{{ update.weight }}</span>
+        </div>
+        <div style='word-wrap: break-word;' class="w-1/4 text-base text-blue-600">
+            {% if update.file %}
+                <a href="{{ update.file.url }}" target="_blank">{{ update.file.name }}</a>
+            {% else %}     
+                <span>No file uploaded</span>
+            {% endif %}
+        </div>
+        <div style='word-wrap: break-word;' class="w-1/4 px-3">
+            <span class="font-light text-base">{{ update.notes }}</span>
+        </div>
+        
+    </div>
+{% endfor %}
+
+
+<style>
+    input[type="number"] {
+        width: 100px;
+        padding: 10px;
+    }
+    input[type="text"] {
+        width: 300px;
+        height: 100px;
+        padding: 10px;
+    }
+</style>
+
+{% endblock %}
+

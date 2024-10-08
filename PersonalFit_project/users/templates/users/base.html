@@ -23,8 +23,6 @@
                     </div>
                     <!--Website Items-->
                     <div class="mt-4">
-                        <a class="py-4 px-2 text-gray-600 font-semibold" href="">Link 1</a>
-                        <a class="py-4 px-2 text-gray-600 font-semibold" href="">Link 2</a>
                         {% if request.user.profile.is_trainer %}
                         <a class="py-4 px-2 text-gray-600 font-semibold" href="{% url 'updateApp_index' %}">Update</a>
                         <a class="py-4 px-2 text-gray-600 font-semibold" href="{% url 'nutritionApp_index' %}">Nutrition</a>
@@ -32,9 +30,9 @@
                         <a class="py-4 px-2 text-gray-600 font-semibold" href="{% url 'users:messages' %}">Messages</a>
                         {% else %} 
                         <!-- Cannot get working link for client-->
-                        <a class="py-4 px-2 text-gray-600 font-semibold" href="">Update</a>
-                        <a class="py-4 px-2 text-gray-600 font-semibold" href="http://localhost:8000/nutrition/{{ request.user.username }}">Nutrition</a>
-                        <a class="py-4 px-2 text-gray-600 font-semibold" href="http://localhost:8000/workouts/{{ request.user.username }}">Workouts</a>
+                        <a class="py-4 px-2 text-gray-600 font-semibold" href="http://localhost:8000/update/{{ request.user.username }}/">Update</a>
+                        <a class="py-4 px-2 text-gray-600 font-semibold" href="http://localhost:8000/nutrition/{{ request.user.username }}/">Nutrition</a>
+                        <a class="py-4 px-2 text-gray-600 font-semibold" href="http://localhost:8000/workouts/{{ request.user.username }}/">Workouts</a>
                         <a class="py-4 px-2 text-gray-600 font-semibold" href="http://localhost:8000/rooms/{{ request.user.username.lower }}/">Messages</a>
                         {% endif %}
                         {% if request.user.is_authenticated %}
@@ -58,6 +56,9 @@
                 text-align: center;
             }
             input[type="password"], textarea {
+                background-color: #ebebeb;
+            }
+            input[type="search"], textarea {
                 background-color: #ebebeb;
             }
         </style>
