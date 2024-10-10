@@ -1,0 +1,34 @@
+{% extends 'users/base.html' %}
+{% load static %}
+{% block body %}
+<h1 align='center' class="text-4xl font-semibold mt-16">Exercise List</h1>
+<h2 align='center' class="text-lg mt-2">categorized by body part</h2>
+
+<div class="flex flex-col items-center mt-32">
+    <div class="flex justify-center space-x-32 mb-24">
+        {% for bodypart in bodyparts %}
+            {% if forloop.counter <= 3 %}
+                <a href="{% url 'exerciseList_bodypart' bodypart %}">
+                    <button class="px-11 py-5 bg-blue-200 border border-gray-900 hover:bg-blue-400 rounded-lg font-semibold text-2xl" type="button">
+                        {{ bodypart }}
+                    </button>
+                </a>
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    <div class="flex justify-center space-x-32">
+        {% for bodypart in bodyparts %}
+            {% if forloop.counter > 3 %}
+            <a href="{% url 'exerciseList_bodypart' bodypart %}">
+                <button class="px-11 py-5 bg-blue-200 border border-gray-900 hover:bg-blue-400 rounded-lg font-semibold text-2xl" type="button">
+                    {{ bodypart }}
+                </button>
+            </a>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
+

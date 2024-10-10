@@ -1,9 +1,12 @@
 from django.http import HttpResponse
-from django.shortcuts import render, redirect 
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from .forms import LoginForm, UserRegistrationForm
 from django.contrib.auth.decorators import login_required
 from .models import Profile, Trainer, Client
+from nutritionApp.models import Meal
+from workoutApp.models import Schedule
+from updateApp.models import Update
 from .forms import UserEditForm, ProfileEditForm, ClientEditTrainerForm
 from chatapp.models import ChatRoom, ChatMessage 
 from django.utils.text import slugify 
@@ -35,15 +38,19 @@ def user_logout(request):
 @login_required
 def index(request):
     profile = Profile.objects.get(user=request.user)
-    all_profiles = Profile.objects.select_related('user').all()
     is_trainer = profile.is_trainer
-    username = profile.user.username
     chatrooms = ChatRoom.objects.all()
 
     if profile.is_trainer:
         trainer = Trainer.objects.get(profile=profile)
         clients = Client.objects.filter(trainer=trainer)
         client_chatrooms = []
+        meals_with_totals = []
+        schedule = []
+        updates = []
+
+        total_daily_calories = total_daily_protein = total_daily_fats = total_daily_carbs = 0
+        proteinP = fatP = carbP = 0
 
         for client in clients:
             chatroom = ChatRoom.objects.filter(name=client.profile.user.username).first()
@@ -60,10 +67,53 @@ def index(request):
     else:
         clients = None
         client_chatrooms = []
+        client = get_object_or_404(Client, profile__user__username=profile.user.username)
+        meals = Meal.objects.filter(client=client).prefetch_related('food')
+        schedule = Schedule.objects.filter(client=client)
+        updates = Update.objects.filter(client=client)
 
-    return render(request, 'users/index.html', {'is_trainer':is_trainer, 'username':username, 
-                                                'all_profiles':all_profiles, 'chatrooms':chatrooms,
-                                                'clients':clients, 'client_chatrooms': client_chatrooms})
+        total_daily_calories = 0
+        total_daily_protein = 0
+        total_daily_fats = 0
+        total_daily_carbs = 0
+
+        meals_with_totals = []
+        for meal in meals:
+            meal_total_calories = sum(food.calories for food in meal.food.all())
+            meal_total_protein = sum(food.protein for food in meal.food.all())
+            meal_total_fats = sum(food.fats for food in meal.food.all())
+            meal_total_carbs = sum(food.carbs for food in meal.food.all())
+
+            total_daily_calories += meal_total_calories
+            total_daily_protein += meal_total_protein
+            total_daily_fats += meal_total_fats
+            total_daily_carbs += meal_total_carbs
+
+            meals_with_totals.append({
+                'meal': meal,
+                'total_calories': meal_total_calories,
+                'total_protein': meal_total_protein,
+                'total_fats': meal_total_fats,
+                'total_carbs': meal_total_carbs
+            })
+
+
+        totalP = (total_daily_protein*4) + (total_daily_fats * 9) + (total_daily_carbs * 4)
+
+        if totalP > 0:
+            proteinP = ((total_daily_protein*4) / totalP) * 100
+            fatP = ((total_daily_fats*9) / totalP) * 100
+            carbP = ((total_daily_carbs*4) / totalP) * 100
+        else:
+            proteinP = fatP = carbP = 0
+
+    return render(request, 'users/index.html', {'is_trainer':is_trainer, 'client_chatrooms': client_chatrooms,
+                                                'chatrooms':chatrooms, 'clients':clients, 'profile':profile,
+                                                'meals':meals_with_totals, 'total_daily_calories':total_daily_calories,
+                                                'total_daily_protein': total_daily_protein, 'total_daily_fats': total_daily_fats,
+                                                'total_daily_carbs': total_daily_carbs, 'proteinP': proteinP,
+                                                'fatP': fatP, 'carbP': carbP, 'schedule': schedule, 'updates': updates,
+                                                 })
 
 
 def register(request):

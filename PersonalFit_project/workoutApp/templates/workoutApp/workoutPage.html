@@ -9,6 +9,10 @@
     <a href="{% url 'addWorkout' client.profile.user.username %}">
         <img class='h-9 w-9 mt-16 mr-48' src="{% static 'workoutApp/images/add_icon.png' %}" alt="">
     </a>
+    {% else %}
+    <a class="mt-16 mb-12 pt-1 mr-16" href="{% url 'workoutPlan' client.profile.user.username %}">
+        <button class="px-7 py-2 bg-green-200 border border-gray-900 hover:bg-green-400 rounded" type="button">Download workout plan pdf</button>
+    </a>
     {% endif %}
 </div>
 
@@ -52,8 +56,14 @@
     </div>
 {% endfor %}
 
+<div class="text-center mt-24 text-lg font-medium text-indigo-700">
+    <a href="{% url 'exerciseList' %}">
+        <span>--- List of all exercises and demonstrations ---</span>
+    </a>
+</div>
 
-<div class="flex justify-between mt-40">
+
+<div class="flex justify-between mt-10">
     <h1 class="font-semibold m-16 text-3xl">Weekly Schedule</h1>
     {% if request.user.profile.is_trainer %}
     <a class="mt-14" href="{% url 'editSchedule' client.profile.user.username %}">

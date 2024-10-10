@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ client.profile.user.username }} Workout Plan</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+        h3 {
+            margin-left: 75px;
+            margin-top: 50px;
+        }
+        table {
+            width: 65%;
+            border-collapse: collapse;
+            margin: 20px auto;
+            page-break-inside: avoid;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #333;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .workout-container {
+            margin-bottom: 30px;
+        }
+        .schedule-container {
+            margin: 40px 0;
+            text-align: center;
+            page-break-before: always;
+        }
+        .schedule-table th {
+            background-color: #f2f2f2;
+        }
+        .schedule-table td {
+            padding: 20px;
+            height: 80px;
+        }
+        hr {
+            margin: 40px auto;
+            width: 100%;
+            border: 0;
+            height: 2px;
+            background-color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h2>{{ client.profile.user.username }}'s Workout Plan</h2>
+
+    {% for workout in workouts %}
+    <div class="workout-container">
+        <h3>{{ workout.workout_names }}</h3>
+        <table>
+            <thread>
+                <tr>
+                    <th>Exercise</th>
+                    <th>Weight (lbs.)</th>
+                    <th>Sets</th>
+                    <th>Reps</th>
+                </tr>
+            </thread>
+            <tbody>
+                {% for exercise in workout.exercises.all %}
+                <tr>
+                    <td style="text-align: left;">{{ exercise.name }}</td>
+                    <td>{{ exercise.weight }}</td>
+                    <td>{{ exercise.sets }}</td>
+                    <td>{{ exercise.reps }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endfor %}
+    <br>
+    <hr>
+    <br>
+    <div class="schedule-container">
+        <h2 style="padding-top: 125px;">Weekly Schedule</h2>
+        <table style="margin-top: 135px; width: 90%;" class="schedule-table">
+            <thread>
+                <tr>
+                    <th>Sunday</th>
+                    <th>Monday</th>
+                    <th>Tuesday</th>
+                    <th>Wednesday</th>
+                    <th>Thursday</th>
+                    <th>Friday</th>
+                    <th>Saturday</th>
+                </tr>
+            </thread>
+            <tbody>
+                {% for day in schedule %}
+                <tr>
+                    <td>{{ day.sunday|default:"Rest" }}</td>
+                    <td>{{ day.monday|default:"Rest" }}</td>
+                    <td>{{ day.tuesday|default:"Rest" }}</td>
+                    <td>{{ day.wednesday|default:"Rest" }}</td>
+                    <td>{{ day.thursday|default:"Rest" }}</td>
+                    <td>{{ day.friday|default:"Rest" }}</td>
+                    <td>{{ day.saturday|default:"Rest" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

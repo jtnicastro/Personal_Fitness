@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ client.profile.user.username }} Meal Plan</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        h3 {
+            margin-left: 20px;
+        }
+        table {
+            width: 85%;
+            border-collapse: collapse;
+            margin: 20px auto;
+            page-break-inside: avoid;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #333;
+            text-align: center;
+            font-size: 14px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .totals-row th {
+            background-color: #e6e6e6;
+        }
+        hr {
+            margin: 40px auto;
+            width: 100%;
+            border: 0;
+            height: 2px;
+            background-color: #333;
+        }
+        .chart-container {
+            text-align: center;
+            margin: 20px auto;
+        }
+    </style>
+
+</head>
+<body>
+    <h2>{{ client.profile.user.username }}'s  Meal Plan</h2>
+
+    {% for meal_with_totals in meals %}
+    <h3>{{ meal_with_totals.meal.meal_names }}</h3>
+    <table>
+        <thread>
+            <tr>
+                <th>Food</th>
+                <th>Calories</th>
+                <th>Protein (g)</th>
+                <th>Fat (g)</th>
+                <th>Carbohydrates (g)</th>
+                <th>Serving Size</th>
+            </tr>
+        </thread>
+        <tbody>
+            {% for food in meal_with_totals.meal.food.all %}
+            <tr>
+                <td style="text-align: left;">{{ food.name }}</td>
+                <td >{{ food.calories }}</td>
+                <td>{{ food.protein }}</td>
+                <td>{{ food.fats }}</td>
+                <td>{{ food.carbs }}</td>
+                <td>{{ food.servingSize }}</td>
+            </tr>
+            {% endfor %}
+            <tr class="totals-row">
+                <th>Total</th>
+                <th>{{ meal_with_totals.total_calories }}</th>
+                <th>{{ meal_with_totals.total_protein }}</th>
+                <th>{{ meal_with_totals.total_fats }}</th>
+                <th>{{ meal_with_totals.total_carbs }}</th>
+                <th></th>
+            </tr>
+        </tbody>
+    </table>
+    {% endfor %}
+    <br>
+    <hr>
+    <br>
+
+    <h2>Nutrition Breakdown</h2>
+    <h3>Total Daily Macros</h3>
+    <table style="width: 75%; margin-bottom: 30px; margin-top: 50px;">
+        <thread>
+            <tr>
+                <th>Total Calories</th>
+                <th>Total Protein (g)</th>
+                <th>Total Fat (g)</th>
+                <th>Total Carbohydrates (g)</th>
+            </tr>
+        </thread>
+        <tbody>
+            <tr>
+                <td>{{ total_daily_calories }}</td>
+                <td>{{ total_daily_protein }}</td>
+                <td>{{ total_daily_fats }}</td>
+                <td>{{ total_daily_carbs }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <br>
+
+    <h3>Macronutrient Distribution</h3>
+    <div class="chart-container">
+        <img src="data:image/png;base64, {{ chart_base64 }}" 
+        alt="Macronutrient Distribution Chart" style="width: 50%; height: auto;">
+    </div>
+</body>
+</html>

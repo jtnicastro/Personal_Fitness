@@ -1,0 +1,28 @@
+{% extends 'users/base.html' %}
+{% load static %}
+{% block body %}
+<h1 align='center' class="text-4xl font-semibold mt-16">Exercise List</h1>
+<h2 align='center' class="text-lg mt-2">categorized by body part</h2>
+
+<div class="m-16">
+    <h1 class="text-3xl font-semibold">{{ exercise.name|title }}</h1>
+    <div class="flex space-x-10 mt-16 text-xl font-medium text-center">
+        <div class="w-1/2">
+            <h3>Demonstration</h3>
+            <div>
+                <img src="{{ exercise.gifUrl }}" alt="{{ exercise.name }}" class="mx-auto mt-10" width="750" height="450">
+            </div>
+        </div>
+        <div class="w-1/2">
+            <h3>Instructions</h3>
+            <ol class="list-decimal mt-24 ml-7 text-left font-normal">
+                {% for instruction in exercise.instructions %}
+                    <li class="my-5">{{ instruction }}</li>
+                {% endfor %}
+            </ol>
+        </div>
+    </div>
+    
+</div>
+
+{% endblock %}

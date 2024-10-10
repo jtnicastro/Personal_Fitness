@@ -1,13 +1,17 @@
 {% extends 'users/base.html' %}
 {% load static %}
 {% block body %}
-<h1 align='center' class="text-4xl font-semibold mt-16">{{ client.profile.user.username }}</h1>
+<h1 align='center' class="text-4xl font-semibold my-16">{{ client.profile.user.username }}</h1>
 
 <div class="flex justify-between">
-    <h1 class="font-semibold m-16 mb-1 text-3xl">Meal Plan</h1>
+    <h1 class="font-semibold mx-16 mb-7 text-3xl">Meal Plan</h1>
     {% if request.user.profile.is_trainer %}
     <a href="{% url 'addMeal' client.profile.user.username %}">
         <img class='h-9 w-9 mt-16 mr-24' src="{% static 'workoutApp/images/add_icon.png' %}" alt="">
+    </a>
+    {% else %}
+    <a class="mx-16 pt-1 mr-24" href="{% url 'mealPlan' client.profile.user.username %}">
+        <button class="px-7 py-2 bg-green-200 border border-gray-900 hover:bg-green-400 rounded" type="button">Download meal plan pdf</button>
     </a>
     {% endif %}
 </div>

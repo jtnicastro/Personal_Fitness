@@ -2,13 +2,54 @@
 {% block body %}
 <h1 class="font-semibold m-10 text-2xl">Client Nutrition</h1>
 
-
-{% for client in clients %}
-    <div class="flex shadow-lg p-10 m-10 bg-gray-200 rounded-lg text-lg">
-        <a class="font-semibold ml-5" href="{% url 'nutritionPage' client.profile.user.username %}">
-            {{ client.profile.user.username }}
-        </a>
+<div class="m-8 mt-7 pt-2 pb-2">
+    <div class="flex justify-between pb-2 text-center">
+        <div class="w-1/6">
+            <span class="">Username</span>
+        </div>
+        <div class="w-1/6">
+            <span class="">Weight Lbs.</span>
+        </div>
+        <div class="w-1/12">
+            <span class="">Protein</span>
+        </div>
+        <div class="w-1/12">
+            <span class="">Fat</span>
+        </div>
+        <div class="w-1/12">
+            <span class="">Carbs</span>
+        </div>
+        <div class="w-1/6">
+            <span class="">Calories</span>
+        </div>
     </div>
+    <hr>
+</div>
+
+
+{% for client_data in clients_with_totals %}
+    <a class="font-semibold ml-5" href="{% url 'nutritionPage' client_data.client.profile.user.username %}">
+    <div class="flex justify-between shadow-lg py-10 m-10 bg-gray-200 rounded-lg text-lg text-center">
+        <div class="w-1/6 text-left pl-12">
+            <span>{{ client_data.client.profile.user.username }}</span>
+        </div>
+        <div class="font-medium w-1/6">
+            <span>{{ client_data.weight }}  lbs.</span>
+        </div>
+        <div class="font-normal w-1/12 mr-1">
+            <span>{{ client_data.total_protein }} g</span>
+        </div>
+        <div class="font-normal w-1/12 mr-1">
+            <span>{{ client_data.total_fats }} g</span>
+        </div>
+        <div class="font-normal w-1/12 mr-12">
+            <span>{{ client_data.total_carbs }} g</span>
+        </div>
+        <div class="font-medium w-1/12 mr-12">
+            <span>{{ client_data.total_calories }}</span>
+        </div>
+    </div>
+    </a>
 {% endfor %}
 
 {% endblock %}

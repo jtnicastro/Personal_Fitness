@@ -10,14 +10,14 @@
                 <div class="w-1/3 text-left">
                     <span class="">{{ room_data.chatroom.name }}</span>
                 </div>
-                <div class="w-1/3 text-center">
+                <div class="w-1/3 text-center font-normal">
                     {% if room_data.last_message %}
                         <span class="">Last message at: {{ room_data.last_message|date:"m/d/y g:i a" }}</span><br>
                     {% else %}
                         <span class="">No messages yet</span>
                     {% endif %}
                 </div>
-                <div class="w-1/3 text-right">
+                <div class="w-1/3 text-right font-medium">
                     {% if room_data.unread_count > 0 %}
                         <span class="">{{ room_data.unread_count }} new messages</span><br>
                     {% else %}

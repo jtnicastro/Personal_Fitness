@@ -1,14 +1,54 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.forms import inlineformset_factory
+from django.template import loader
+from django.http import HttpResponse
+from django.core.paginator import Paginator
+
 from .models import Workout, Exercise, Schedule
 from users.models import Client, Trainer
+from nutritionApp.models import Meal, Food
+from updateApp.models import Update
 from .forms import WorkoutForm, ExerciseFormSet, ScheduleForm
-from django.forms import inlineformset_factory
+
+import pdfkit
+import requests
+import difflib
 
 # Create your views here.
 def index(request):
     trainer = get_object_or_404(Trainer, profile__user=request.user)
     clients = trainer.clients.all()
-    return render(request, 'workoutApp/index.html', {'clients':clients,})
+
+    clients_with_totals = []
+    for client in clients:
+        last_update = Update.objects.filter(client=client).last()
+        weight = last_update.weight if last_update else None
+        meals = Meal.objects.filter(client=client).prefetch_related('food')
+        total_daily_calories = 0
+
+        for meal in meals:
+            total_daily_calories += sum(food.calories for food in meal.food.all())
+
+        try:
+            schedule = Schedule.objects.get(client=client)
+            workouts_per_week = sum(
+                1 for day in [
+                    schedule.sunday, schedule.monday, schedule.tuesday, schedule.wednesday,
+                    schedule.thursday, schedule.friday, schedule.saturday,   
+                ] 
+                if day is not None
+            )
+        except Schedule.DoesNotExist:
+            workouts_per_week = 0
+
+        clients_with_totals.append({
+            'client': client,
+            'weight': weight,
+            'total_daily_calories': total_daily_calories,
+            'workouts_per_week': workouts_per_week,
+        })
+
+    return render(request, 'workoutApp/index.html', {'clients_with_totals':clients_with_totals,})
 
 def workoutPage(request, client_username):
     client = get_object_or_404(Client, profile__user__username=client_username)
@@ -22,7 +62,6 @@ def addWorkout(request, client_username):
     ExerciseFormSetDynamic = inlineformset_factory(
         Workout, Exercise, fields=('name', 'sets', 'reps', 'weight'), extra=1, can_delete=True
     )
-
 
     if request.method == "POST":
         workout_form = WorkoutForm(request.POST)
@@ -93,3 +132,85 @@ def editSchedule(request, client_username):
         form = ScheduleForm(instance=schedule, workouts=workouts)
 
     return render(request, "workoutApp/editSchedule.html", {'client':client, 'form':form})
+
+def workoutPlan(request, client_username):
+    client = get_object_or_404(Client, profile__user__username=client_username)
+    workouts = Workout.objects.filter(client=client).prefetch_related('exercises')
+    schedule = Schedule.objects.filter(client=client)
+
+    template = loader.get_template('workoutApp/workoutPlan.html')
+    html = template.render({'client':client, 'workouts':workouts, 'schedule':schedule,})
+
+    options = {
+        'page-size': 'Letter',
+        'encoding': 'UTF-8',
+    }
+    pdf = pdfkit.from_string(html, False, options)
+    response = HttpResponse(pdf, content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename = "Workout_Plan.pdf"'
+
+    return response
+
+def exerciseList(request):
+    bodyparts = ['Back', 'Chest', 'Shoulders', 'Arms', 'Legs']
+    return render(request, 'workoutApp/exerciseList.html', {'bodyparts': bodyparts})
+
+def exerciseList_bodypart(request, bodypart):
+    api_bodypart_mapping = {
+        "Back": "back",
+        "Chest": "chest",
+        "Shoulders": "shoulders",
+        "Arms": "upper arms",
+        "Legs": "upper legs", 
+    }
+
+    api_bodypart = api_bodypart_mapping.get(bodypart, bodypart.lower())
+
+    url = f"https://exercisedb.p.rapidapi.com/exercises/bodyPart/{api_bodypart}"
+    querystring = {"limit":"0", "offset":"0"}
+    headers = {
+        "x-rapidapi-key": "296445f516mshcc2e60ea2bddbb1p17b7d9jsn48e5879a6e87",
+        "x-rapidapi-host": "exercisedb.p.rapidapi.com"
+    }
+    response = requests.get(url, headers=headers, params=querystring)
+    if response.status_code == 200:
+        exercises = response.json()
+    else:
+        exercises = []
+
+    exercise_search = request.GET.get('exercise_search', '').lower()
+
+    if exercise_search:
+        filtered_exercises = []
+        for exercise in exercises:
+            name_match = difflib.SequenceMatcher(None, exercise_search, exercise['name'].lower()).ratio()
+            target_match = difflib.SequenceMatcher(None, exercise_search, exercise['target'].lower()).ratio()
+
+            if name_match > 0.99 or target_match > 0.99 or exercise_search in exercise['name'].lower() or exercise_search in exercise['target'].lower():
+                filtered_exercises.append(exercise)
+
+
+        exercises = filtered_exercises 
+
+    paginator = Paginator(exercises, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'workoutApp/exerciseList_bodypart.html', {'page_obj': page_obj, 'bodypart':bodypart, 'exercise_search':exercise_search,})
+
+def exerciseDetails(request, id):
+    url = f"https://exercisedb.p.rapidapi.com/exercises/exercise/{id}"
+    querystring = {"limit":"0", "offset":"0"}
+    headers = {
+        "x-rapidapi-key": "296445f516mshcc2e60ea2bddbb1p17b7d9jsn48e5879a6e87",
+        "x-rapidapi-host": "exercisedb.p.rapidapi.com"
+    }
+
+    response = requests.get(url, headers=headers, params=querystring)
+
+    if response.status_code == 200:
+        exercise = response.json()
+    else:
+        exercise = None
+
+    return render(request, 'workoutApp/exerciseDetails.html', {'exercise':exercise})
