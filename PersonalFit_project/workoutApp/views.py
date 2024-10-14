@@ -169,7 +169,7 @@ def exerciseList_bodypart(request, bodypart):
     url = f"https://exercisedb.p.rapidapi.com/exercises/bodyPart/{api_bodypart}"
     querystring = {"limit":"0", "offset":"0"}
     headers = {
-        "x-rapidapi-key": "296445f516mshcc2e60ea2bddbb1p17b7d9jsn48e5879a6e87",
+        "x-rapidapi-key": "b0c62aa893mshf7f6dc56938aa52p1b8d39jsn7d4e65d787cf",
         "x-rapidapi-host": "exercisedb.p.rapidapi.com"
     }
     response = requests.get(url, headers=headers, params=querystring)
@@ -196,13 +196,15 @@ def exerciseList_bodypart(request, bodypart):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
+    print(response.status_code, response.json())
+
     return render(request, 'workoutApp/exerciseList_bodypart.html', {'page_obj': page_obj, 'bodypart':bodypart, 'exercise_search':exercise_search,})
 
 def exerciseDetails(request, id):
     url = f"https://exercisedb.p.rapidapi.com/exercises/exercise/{id}"
     querystring = {"limit":"0", "offset":"0"}
     headers = {
-        "x-rapidapi-key": "296445f516mshcc2e60ea2bddbb1p17b7d9jsn48e5879a6e87",
+        "x-rapidapi-key": "b0c62aa893mshf7f6dc56938aa52p1b8d39jsn7d4e65d787cf",
         "x-rapidapi-host": "exercisedb.p.rapidapi.com"
     }
 

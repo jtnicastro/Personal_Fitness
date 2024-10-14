@@ -1,0 +1,20 @@
+# Python
+*.pyc
+__pycache__/
+
+# Virtual Environment
+env/
+
+# Database
+*.sqlite3
+
+# Node modules
+node_modules/
+
+# Django
+/uploads/
+/staticfiles/
+
+# Miscellaneous
+.DS_Store
+*.log

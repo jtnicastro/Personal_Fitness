@@ -1,19 +1,37 @@
 {% extends 'users/base.html' %}
 {% block body %}
-<h2>Edit profile form</h2>
-<form method="POST">
+
+<h1 class="text-center text-2xl font-semibold mt-16">Edit profile</h1>
+<div class="container py-2">
+
+</div>
+
+<form method="POST" class="bg-white shadow-md mx-auto m-10 w-2/5 rounded px-8 pt-6 pb-8 mb-2">
     {% csrf_token %}
-    <div>
+    <div hidden>
         {{ user_form.as_p }}
         {{ profile_form.as_p }}
     </div>
+    <div class="mb-2">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="">Email</label>
+        <div class="shadow text-gray-700 appearance-none border rounded py-2 px-3 mr-10"> {{ user_form.email }} </div>
+    </div>
+    <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="">First Name</label>
+        <div class="shadow text-gray-700 appearance-none border rounded py-2 px-3 mr-10"> {{ user_form.first_name }} </div>
+    </div>
+    <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="">Last Name</label>
+        <div class="shadow text-gray-700 appearance-none border rounded py-2 px-3 mr-10"> {{ user_form.last_name }} </div>
+    </div>
     {% if client_form %}
-    <div>
-        {{ client_form.as_p }}
+    <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="">Trainer</label>
+        <div class="shadow text-gray-700 appearance-none border rounded py-2 px-3 mr-10"> {{ client_form.trainer }} </div>
     </div>
     {% endif %}
 
-    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <button class="text-white bg-green-500 px-5 py-2"  type="submit">Save Changes</button>
 </form>
 
 {% endblock %}

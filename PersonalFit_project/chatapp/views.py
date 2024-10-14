@@ -40,8 +40,9 @@ def chatroom(request, slug):
     profile = Profile.objects.get(user=username)
     client = Client.objects.get(profile=profile)
     trainer_name = client.trainer
+    is_trainer = profile.is_trainer
 
     ChatMessage.objects.filter(room=chatroom, is_read=False).update(is_read=True)
 
     return render(request, 'chatapp/room.html',{'chatroom':chatroom, 'messages':messages,
-                                                'trainer_name': trainer_name})
+                                                'trainer_name': trainer_name, 'is_trainer':is_trainer, 'client':client, })

@@ -1,10 +1,14 @@
 {% extends 'users/base.html' %}
 {% block body %}
-<div class='m-10 flex justify-center text-2xl font-semibold'>
-{{ trainer_name }}
+<div class='m-16 flex justify-center text-3xl font-semibold'>
+    {% if request.user.profile.is_trainer %}
+        {{ client.profile.user.username }}
+    {% else %}
+        {{ trainer_name }}
+    {% endif %}
 </div>
 
-<div class="message-container h-4/5 m-10 mx-32 mb-18 overflow-auto" id="message-container">
+<div class="message-container h-4/6 m-10 mt-16 mx-32 overflow-auto" id="message-container">
     <div class="" id="chat-messages">
         {% for message in messages %}
             {% if message.user.username == request.user.username %}
