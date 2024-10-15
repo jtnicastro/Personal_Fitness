@@ -7,7 +7,7 @@ PersonalFit is a comprehensive Django-based web application designed to enhance 
 - [Features](#features)
 - [Installation](#installation)
 - [Usage](#usage)
-- [Screenshots](#screenshots)
+- [Demonstrations](#demonstrations)
 - [Project Structure](#project-structure)
 - [Technologies Used](#technologies-used)
 - [Contributing](#contributing)
@@ -39,7 +39,7 @@ The PersonalFit application allows trainers to manage their clients’ workout r
 + **In-App Messaging:** Real-time chat functionality between trainers and clients, facilitating instant feedback and guidance.
 
 ### Additional Features
-+ **Pagination and Search:**Easily navigate through data with paginated lists and search functionality to quickly find workouts, nutrition plans, or messages.
++ **Pagination and Search:** Easily navigate through data with paginated lists and search functionality to quickly find workouts, nutrition plans, or messages.
 + **Image Upload:** Allows clients and trainers to upload images, providing visual progress tracking or additional details to support training.
 + **PDF Generation:** Generate and download personalized nutrition and workout plans as PDFs.
 
@@ -71,24 +71,119 @@ The PersonalFit application allows trainers to manage their clients’ workout r
 
 ## Project Structure
 ```bash
-    lifting-log/
-    │
-    ├── app.py            # Main application file
-    ├── forms.py          # Form classes for Flask-WTF
-    ├── models.py         # Database models
-    ├── views.py          # View functions
-    ├── templates/        # HTML templates
-    │   ├── base.html
-    │   ├── alt_base.html
-    │   ├── home.html
-    │   ├── addExercise.html
-    │   ├── entries.html
-    │   ├── analyze.html
-    │   └── register.html
-    ├── static/           # Static files (CSS, JS, Images)
-    │   └── theme.css
-    ├── requirements.txt  # Requirements file
-    └── README.md         # This README file 
+    # PersonalFit_project Structure
+
+PersonalFit_project/
+├── __init__.py              # Initialization file for the Django project
+├── asgi.py                  # ASGI configuration for async support
+├── settings.py              # Project-wide settings and configuration
+├── urls.py                  # URL routing for the project
+├── wsgi.py                  # WSGI configuration for deployment
+├── templates/               # Project-wide HTML templates
+│
+├── nutritionApp/            # App for managing nutrition plans
+│   ├── __init__.py
+│   ├── admin.py             # Admin configuration for nutrition models
+│   ├── apps.py              # App configuration file
+│   ├── forms.py             # Forms for nutrition data input
+│   ├── models.py            # Database models for nutrition
+│   ├── tests.py             # Unit tests for the nutrition app
+│   ├── urls.py              # URL routing for nutrition views
+│   ├── views.py             # View logic for handling nutrition pages
+│   ├── migrations/          # Database migrations for the nutrition app
+│   └── templates/           # Nutrition-related templates
+│       └── nutritionApp/
+│           ├── addMeal.html
+│           ├── editMeal.html
+│           ├── index.html
+│           ├── meal_plan.html
+│           └── nutritionPage.html
+│
+├── updateApp/               # App for managing client updates like weight and height
+│   ├── __init__.py
+│   ├── admin.py
+│   ├── apps.py
+│   ├── forms.py
+│   ├── models.py
+│   ├── tests.py
+│   ├── urls.py
+│   ├── views.py
+│   ├── migrations/
+│   └── templates/           # Update-related templates
+│       └── updateApp/
+│           ├── index.html
+│           └── updatePage.html
+│
+├── users/                   # App for user registration, authentication, and profile management
+│   ├── __init__.py
+│   ├── admin.py
+│   ├── apps.py
+│   ├── forms.py
+│   ├── models.py
+│   ├── tests.py
+│   ├── urls.py
+│   ├── views.py
+│   ├── migrations/
+│   ├── static/              # Static files for the users app
+│   │   └── users/
+│   │       ├── style.css
+│   │       ├── styles.css
+│   │       ├── tw.css
+│   │       └── images/
+│   │           └── fitness_logo.png
+│   └── templates/           # User-related templates
+│       └── users/
+│           ├── base.html
+│           ├── edit.html
+│           ├── index.html
+│           ├── login.html
+│           ├── logout.html
+│           ├── password_change_done.html
+│           ├── password_change_form.html
+│           ├── password_reset_complete.html
+│           ├── password_reset_confirm.html
+│           ├── password_reset_done.html
+│           ├── password_reset_form.html
+│           ├── register.html
+│           └── register_done.html
+│
+├── workoutApp/              # App for workout planning and tracking
+│   ├── __init__.py
+│   ├── admin.py
+│   ├── apps.py
+│   ├── forms.py
+│   ├── models.py
+│   ├── tests.py
+│   ├── urls.py
+│   ├── views.py
+│   ├── migrations/
+│   ├── static/              # Static files for the workout app
+│   │   └── workoutApp/
+│   │       ├── style.css
+│   │       └── images/
+│   │           ├── add_icon.png
+│   │           └── trash_icon.png
+│   └── templates/           # Workout-related templates
+│       └── workoutApp/
+│           ├── addWorkout.html
+│           ├── editSchedule.html
+│           ├── editWorkout.html
+│           ├── exerciseDetails.html
+│           ├── exerciseList.html
+│           ├── exerciseList_bodypart.html
+│           ├── index.html
+│           ├── workoutPage.html
+│           └── workoutPlan.html
+│
+├── uploads/                 # Directory for storing uploaded files, such as progress images
+│   ├── BodyPic1.png
+│   ├── BodyPic2.png
+│   ├── BodyPic3.png
+│   ├── progressPic1.png
+│   ├── progressPic2.png
+│   └── Updates1.png
+└── README.md                # Project README file
+
 ```
 ## Technologies Used
 + **Python:** Backend logic using Flask.
