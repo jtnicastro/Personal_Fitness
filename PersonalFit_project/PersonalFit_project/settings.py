@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import environ 
+import django_on_heroku
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -153,5 +154,5 @@ LOGIN_REDIRECT_URL = 'users/index.html'
 
 EMAIL_BACKEND ='django.core.mail.backends.console.EmailBackend'
 
-import django_on_heroku
+
 django_on_heroku.settings(locals())
