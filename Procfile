@@ -1,1 +1,1 @@
-web: gunicorn PersonalFit_project.PersonalFit_project.wsgi:application
+web: gunicorn PersonalFit_project.wsgi:application
