@@ -153,3 +153,5 @@ LOGIN_REDIRECT_URL = 'users/index.html'
 
 EMAIL_BACKEND ='django.core.mail.backends.console.EmailBackend'
 
+import django_on_heroku
+django_on_heroku.settings(locals())
