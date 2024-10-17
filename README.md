@@ -65,7 +65,11 @@ The PersonalFit application allows trainers to manage their clients’ workout r
 
 
 ## Demonstraction
+
+### Trainer user example
 ![Trainer](https://github.com/jtnicastro/Personal_Fitness/blob/master/Demo_GIFS/Trainer_gif.gif)
+
+### Client user example
 ![Client](https://github.com/jtnicastro/Personal_Fitness/blob/master/Demo_GIFS/Client_gif.gif)
 
 ## Project Structure
