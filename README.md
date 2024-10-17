@@ -65,9 +65,8 @@ The PersonalFit application allows trainers to manage their clients’ workout r
 
 
 ## Demonstraction
-![add_workout](https://github.com/jtnicastro/lifting_log/blob/master/screenshots/add_workout.JPG)
-![entries](https://github.com/jtnicastro/lifting_log/blob/master/screenshots/entries.JPG)
-![analyze](https://github.com/jtnicastro/lifting_log/blob/master/screenshots/analyze.JPG) 
+![Trainer](https://github.com/jtnicastro/Personal_Fitness/blob/master/Demo_GIFS/Trainer_gif.gif)
+![Client](https://github.com/jtnicastro/Personal_Fitness/blob/master/Demo_GIFS/Client_gif.gif)
 
 ## Project Structure
 ```bash
